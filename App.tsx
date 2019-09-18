@@ -1,5 +1,4 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import IndexScreen from './src/screens/IndexScreen';
@@ -15,15 +14,15 @@ const AppNavigator = createStackNavigator(
 );
 
 const AppContainer = createAppContainer(AppNavigator);
-const blogPosts = [
-  {title:'Blog Post #1'},
-  {title:'Blog Post #2'},
-  {title:'Blog Post #3'}
-];
-export default class App extends React.Component {
-  render() {
-    return <BlogContext.Provider value={JSON.stringify(blogPosts)}>
-      <AppContainer />
-    </BlogContext.Provider>;
+const App = () => {
+  const [blogPosts, setBlogPosts] = useState([{title:'Blog Post #1'}]);
+  const addBlogPost = () => {
+    console.log('add blog post');
+    setBlogPosts([...blogPosts, { title: `Blog Post #${blogPosts.length + 1}` }]);
   }
+
+  return <BlogContext.Provider value={{ blogPosts, addBlogPost }}>
+    <AppContainer />
+  </BlogContext.Provider>;
 }
+export default App;
