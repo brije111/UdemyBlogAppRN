@@ -15,7 +15,7 @@ const AppNavigator = createStackNavigator(
 
 const AppContainer = createAppContainer(AppNavigator);
 const App = () => {
-  const [blogPosts, setBlogPosts] = useState([{title:'Blog Post #1'}]);
+  const [blogPosts, setBlogPosts] = useState([{ title: 'Blog Post #1' }]);
   const addBlogPost = () => {
     console.log('add blog post');
     setBlogPosts([...blogPosts, { title: `Blog Post #${blogPosts.length + 1}` }]);
