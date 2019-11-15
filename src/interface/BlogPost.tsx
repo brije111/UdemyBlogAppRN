@@ -1,3 +1,4 @@
 export default interface BlogPost {
-    title:string
+    id: number;
+    title: string
 }

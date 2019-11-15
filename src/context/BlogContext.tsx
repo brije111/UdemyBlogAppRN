@@ -1,17 +1,17 @@
 import React from 'react';
 import BlogPost from '../interface/BlogPost';
+import { Action } from '../../App';
 
 export interface DataType {
-    blogPosts:BlogPost[];
-    addBlogPost:()=>void;
+    blogPosts: BlogPost[];
+    dispatch?: React.Dispatch<Action>;
 }
 
-const data:DataType = {
-    blogPosts:[],
-    addBlogPost:undefined
+const data: DataType = {
+    blogPosts:[]
 }
 
-export const BlogContext = React.createContext(data);
+export const BlogContext = React.createContext<DataType>(data);
 
 // export const BlogProvider = ({children}) => {
 //     return <BlogContext.Provider value={'data'}>
