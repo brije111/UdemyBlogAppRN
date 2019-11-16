@@ -5,10 +5,13 @@ import IndexScreen from './src/screens/IndexScreen';
 import { BlogContext } from './src/context/BlogContext';
 import BlogPost from './src/interface/BlogPost';
 import { ADD_BLOG, READ_BLOG, UPDATE_BLOG, DELETE_BLOG } from './src/actions';
+import EditScreen from './src/screens/EditScreen';
+import NavigationService from './src/NavigationService';
 
 const AppNavigator = createStackNavigator(
   {
-    Index: IndexScreen
+    Index: IndexScreen,
+    Edit: EditScreen
   },
   {
     initialRouteName: 'Index',
@@ -63,7 +66,7 @@ const App = () => {
   // }
 
   return <BlogContext.Provider value={{ blogPosts: state.blogPosts, dispatch }}>
-    <AppContainer />
+    <AppContainer ref={navigatorRef => { NavigationService.setTopLevelNavigator(navigatorRef) }} />
   </BlogContext.Provider>;
 }
 export default App;

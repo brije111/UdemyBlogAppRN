@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { BlogContext } from '../context/BlogContext';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import BlogPost from '../interface/BlogPost';
-import { ADD_BLOG, DELETE_BLOG } from '../actions';
+import { ADD_BLOG, DELETE_BLOG, UPDATE_BLOG } from '../actions';
 import { MaterialIcons } from '@expo/vector-icons';
+import NavigationService from '../NavigationService';
 
 const IndexScreen = () => {
     //const value = useContext(BlogContext);
@@ -23,11 +24,14 @@ const IndexScreen = () => {
             <FlatList
                 data={blogPosts}
                 keyExtractor={blogPost => blogPost.id.toString()}
-                renderItem={({ item }) => <View style={style.view}>
-                    <Text style={{ alignSelf: "stretch" }}>{(item as BlogPost).title}</Text>
-                    <MaterialIcons style={{ alignSelf: "flex-end" }} name="delete" size={32}
-                        onPress={() => onDelete(item)} />
-                </View>} />
+                renderItem={({ item }) => <TouchableOpacity onPress={() => NavigationService.navigate('Edit', { ...item })}>
+                    <View style={style.view}>
+                        <Text style={{ alignSelf: "stretch" }}>{(item as BlogPost).title}</Text>
+                        <MaterialIcons style={{ alignSelf: "flex-end" }} name="delete" size={32}
+                            onPress={() => onDelete(item)} />
+                    </View>
+                </TouchableOpacity>}
+            />
         </View>
     );
 }
