@@ -1,14 +1,16 @@
 import React from 'react';
-import BlogPost from '../interface/BlogPost';
+import BlogPost from '../interface/Contact';
 import { Action } from '../../App';
+import Contact from '../interface/Contact';
 
 export interface DataType {
-    blogPosts: BlogPost[];
-    dispatch?: React.Dispatch<Action>;
+    contacts: Contact[];
+    getContacts?: () => {};
+    deleteContact?: (id: string) => {};
 }
 
 const data: DataType = {
-    blogPosts:[]
+    contacts: []
 }
 
 export const BlogContext = React.createContext<DataType>(data);

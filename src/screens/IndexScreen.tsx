@@ -1,18 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { BlogContext } from '../context/BlogContext';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import BlogPost from '../interface/BlogPost';
-import { ADD_BLOG, DELETE_BLOG, UPDATE_BLOG } from '../actions';
+import Contact from '../interface/Contact';
 import { MaterialIcons } from '@expo/vector-icons';
 import NavigationService from '../NavigationService';
 
 const IndexScreen = () => {
     //const value = useContext(BlogContext);
-    const { blogPosts, dispatch } = useContext(BlogContext);
+    const { contacts, getContacts, deleteContact } = useContext(BlogContext);
 
-    const onAdd = () => dispatch({ type: ADD_BLOG, payload: { id: blogPosts.length + 1, title: `Blog Post #${blogPosts.length + 1}` } });
-    const onDelete = (item: BlogPost) => dispatch({ type: DELETE_BLOG, payload: item });
+    useEffect(() => {
+        getContacts();
+    }, [])
+
+    const onAdd = () => NavigationService.navigate('Create');
+    const onDelete = (id: string) => deleteContact(id);
 
     return (
         <View>
@@ -22,13 +25,13 @@ const IndexScreen = () => {
             <Button title='Add Post'
                 onPress={onAdd} />
             <FlatList
-                data={blogPosts}
-                keyExtractor={blogPost => blogPost.id.toString()}
-                renderItem={({ item }) => <TouchableOpacity onPress={() => NavigationService.navigate('Edit', { ...item })}>
+                data={contacts}
+                keyExtractor={contact => contact._id.toString()}
+                renderItem={({ item }) => <TouchableOpacity onPress={() => NavigationService.navigate('Edit', { id: item._id })}>
                     <View style={style.view}>
-                        <Text style={{ alignSelf: "stretch" }}>{(item as BlogPost).title}</Text>
+                        <Text style={{ alignSelf: "stretch" }}>{(item as Contact).firstName}</Text>
                         <MaterialIcons style={{ alignSelf: "flex-end" }} name="delete" size={32}
-                            onPress={() => onDelete(item)} />
+                            onPress={() => onDelete(item._id)} />
                     </View>
                 </TouchableOpacity>}
             />

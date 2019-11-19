@@ -3,15 +3,18 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import IndexScreen from './src/screens/IndexScreen';
 import { BlogContext } from './src/context/BlogContext';
-import BlogPost from './src/interface/BlogPost';
-import { ADD_BLOG, READ_BLOG, UPDATE_BLOG, DELETE_BLOG } from './src/actions';
+import Contact from './src/interface/Contact';
+import { ADD_BLOG, READ_CONTACTS, UPDATE_BLOG, DELETE_CONTACT } from './src/actions';
 import EditScreen from './src/screens/EditScreen';
 import NavigationService from './src/NavigationService';
+import { CreateBlog } from './src/screens/CreateBlog';
+import jsonServer from './src/api/jsonServer';
 
 const AppNavigator = createStackNavigator(
   {
     Index: IndexScreen,
-    Edit: EditScreen
+    Edit: EditScreen,
+    Create: CreateBlog
   },
   {
     initialRouteName: 'Index',
@@ -21,51 +24,53 @@ const AppContainer = createAppContainer(AppNavigator);
 
 
 
-const reducer = (state: Data, action: Action) => {
+const reducer = (state: Contact[], action: Action) => {
   switch (action.type) {
-    case ADD_BLOG:
-      state.blogPosts.push(action.payload);
-      return { ...state };
-    case READ_BLOG:
-      return { ...state };
-    case UPDATE_BLOG:
-      state.blogPosts.forEach(element => {
-        if (element.id === action.payload.id) {
-          element.title = action.payload.title;
-          //break the loop
-          return false;
-        }
-      });
-      return { ...state };
-    case DELETE_BLOG:
-      const index = state.blogPosts.indexOf(action.payload);
-      if (index != -1)
-        state.blogPosts.splice(index, 1);
-      return { ...state };
+    // case ADD_BLOG:
+    //   state.contacts.push(action.payload);
+    //   return { ...state };
+    case READ_CONTACTS:
+      return action.payload;
+    // case UPDATE_BLOG:
+    //   state.contacts.forEach(element => {
+    //     if (element.id === action.payload.id) {
+    //       element.title = action.payload.title;
+    //       //break the loop
+    //       return false;
+    //     }
+    //   });
+    //   return { ...state };
+    case DELETE_CONTACT:
+      return action.payload;
+  }
+}
+
+const getContacts = (dispatch: React.Dispatch<Action>) => () => {
+  return async () => {
+    const response = await jsonServer.get('/contact');
+    console.log(response);
+    dispatch({ type: READ_CONTACTS, payload: response.data })
+  }
+}
+
+const deleteContact = (dispatch: React.Dispatch<Action>) => (id: string) => {
+  return async () => {
+    const response = await jsonServer.delete(`/contact/${id}`);
+    dispatch({ type: DELETE_CONTACT, payload: response.data })
   }
 }
 
 export interface Action {
   type: string;
-  payload: BlogPost;
-}
-interface Data {
-  blogPosts: BlogPost[];
+  payload: Contact[];
 }
 
-const initialState: Data = {
-  blogPosts: []
-}
+const initialState: Contact[] = [];
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  // const [blogPosts, setBlogPosts] = useState([{ title: 'Blog Post #1' }]);
-  // const addBlogPost = () => {
-  //   console.log('add blog post');
-  //   setBlogPosts([...blogPosts, { title: `Blog Post #${blogPosts.length + 1}` }]);
-  // }
+  const [contacts, dispatch] = useReducer(reducer, initialState);
 
-  return <BlogContext.Provider value={{ blogPosts: state.blogPosts, dispatch }}>
+  return <BlogContext.Provider value={{ contacts, getContacts: getContacts(dispatch), deleteContact: deleteContact(dispatch) }}>
     <AppContainer ref={navigatorRef => { NavigationService.setTopLevelNavigator(navigatorRef) }} />
   </BlogContext.Provider>;
 }
