@@ -11,6 +11,7 @@ const IndexScreen = () => {
     const { contacts, getContacts, deleteContact } = useContext(BlogContext);
 
     useEffect(() => {
+        console.log('Index useEffect called');
         getContacts();
     }, [])
 

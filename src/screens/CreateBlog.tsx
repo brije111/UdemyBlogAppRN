@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { BlogContext } from '../context/BlogContext';
-import BlogPost from '../interface/Contact';
+//import Contact from '../interface/Contact';
 import { ADD_BLOG } from '../actions';
 import { NavigationStackProp } from 'react-navigation-stack/lib/typescript/types';
 
@@ -10,15 +10,18 @@ interface Props {
 };
 
 export const CreateBlog = ({ navigation }: Props) => {
-    const { blogPosts, dispatch } = useContext(BlogContext);
+    const { contacts } = useContext(BlogContext);
     const [text, setText] = useState('');
     const onSubmit = () => {
-        const blogPost: BlogPost = {
-            id: blogPosts.length + 1,
-            title: text
-        };
-        dispatch({ type: ADD_BLOG, payload: blogPost });
+        // const blogPost: BlogPost = {
+        //     id: blogPosts.length + 1,
+        //     title: text
+        // };
+        // dispatch({ type: ADD_BLOG, payload: blogPost });
     }
+    useEffect(() => {
+        console.log('Create useEffect called');
+    }, [])
     return (
         <View>
             <Text>

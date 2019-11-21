@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { View, Text, TextInput, Button } from 'react-native';
 import { BlogContext } from '../context/BlogContext';
 import BlogPost from '../interface/Contact';
@@ -11,25 +11,28 @@ interface Props {
 };
 
 const EditScreen = (props: Props) => {
-    const id = props.navigation.getParam('blogId');
+    const id = props.navigation.getParam('id');
     //console.log(id);
-    const { blogPosts, dispatch } = useContext(BlogContext);
+    const { contacts } = useContext(BlogContext);
     //dispatch({ type: READ_BLOG, payload: { id: id } });
-    const getBlogPost = (): BlogPost | undefined => {
-        let blogPost: BlogPost | undefined;
-        blogPosts.forEach(element => {
-            if (element.id === id) {
-                blogPost = element;
-                return false;
-            }
-        });
-        return blogPost;
-    }
-    const blogPost = getBlogPost();
-    const [text, setText] = useState(blogPost.title);
+    // const getBlogPost = (): BlogPost | undefined => {
+    //     let blogPost: BlogPost | undefined;
+    //     blogPosts.forEach(element => {
+    //         if (element.id === id) {
+    //             blogPost = element;
+    //             return false;
+    //         }
+    //     });
+    //     return blogPost;
+    // }
+    // const blogPost = getBlogPost();
+    useEffect(() => {
+        console.log('Edit useEffect called');
+    }, [])
+    const [text, setText] = useState();
     const onEdit = () => {
-        blogPost.title = text;
-        dispatch({ type: UPDATE_BLOG, payload: blogPost });
+        // blogPost.title = text;
+        // dispatch({ type: UPDATE_BLOG, payload: blogPost });
     }
     return (
         <View>

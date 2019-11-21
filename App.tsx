@@ -9,6 +9,7 @@ import EditScreen from './src/screens/EditScreen';
 import NavigationService from './src/NavigationService';
 import { CreateBlog } from './src/screens/CreateBlog';
 import jsonServer from './src/api/jsonServer';
+import { AxiosResponse } from 'axios';
 
 const AppNavigator = createStackNavigator(
   {
@@ -40,16 +41,20 @@ const reducer = (state: Contact[], action: Action) => {
     //     }
     //   });
     //   return { ...state };
-    case DELETE_CONTACT:
-      return action.payload;
+    // case DELETE_CONTACT:
+    //   return action.payload;
   }
 }
 
-const getContacts = (dispatch: React.Dispatch<Action>) => () => {
+const getContacts = (dispatch: React.Dispatch<Action>) => {
   return async () => {
-    const response = await jsonServer.get('/contact');
-    console.log(response);
-    dispatch({ type: READ_CONTACTS, payload: response.data })
+    try {
+      const response = await jsonServer.get<AxiosResponse<Contact[]>>('/contact');
+      console.log(response);
+      dispatch({ type: READ_CONTACTS, payload: response.data.data })
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
